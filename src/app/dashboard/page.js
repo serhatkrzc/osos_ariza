@@ -17,10 +17,10 @@ export default function DashboardPage() {
   const [stations, setStations] = useState([]);
   const [faultTemplates, setFaultTemplates] = useState([]);
   const [teams, setTeams] = useState([]);
-  const [technicians, setTechnicians] = useState([]);
+  const [surveyants, setSurveyants] = useState([]);
   const [allFaults, setAllFaults] = useState([]);
-  const [techFaults, setTechFaults] = useState([]);
-  const [techTeams, setTechTeams] = useState([]);
+  const [surveyantFaults, setSurveyantFaults] = useState([]);
+  const [surveyantTeams, setSurveyantTeams] = useState([]);
 
   // Form Durumları - İstasyon Ekleme
   const [stationCode, setStationCode] = useState('');
@@ -34,7 +34,7 @@ export default function DashboardPage() {
 
   // Form Durumları - Ekip Oluşturma
   const [teamName, setTeamName] = useState('');
-  const [selectedTechs, setSelectedTechs] = useState([]);
+  const [selectedSurveyants, setSelectedSurveyants] = useState([]);
 
   // Form Durumları - İstasyona Arıza Atama
   const [selectedStation, setSelectedStation] = useState('');
@@ -48,7 +48,7 @@ export default function DashboardPage() {
   const [isEditTeamOpen, setIsEditTeamOpen] = useState(false);
   const [editingTeam, setEditingTeam] = useState(null);
   const [editTeamName, setEditTeamName] = useState('');
-  const [editSelectedTechs, setEditSelectedTechs] = useState([]);
+  const [editSelectedSurveyants, setEditSelectedSurveyants] = useState([]);
 
   const [isAssignFaultOpen, setIsAssignFaultOpen] = useState(false);
   const [assigningFault, setAssigningFault] = useState(null);
@@ -75,28 +75,28 @@ export default function DashboardPage() {
     if (!user) return;
     try {
       if (user.role === 'yetkili') {
-        const [stList, tempList, teamList, techList, faultList] = await Promise.all([
+        const [stList, tempList, teamList, surveyantList, faultList] = await Promise.all([
           dbService.getStations(),
           dbService.getFaultTemplates(),
           dbService.getTeams(),
-          dbService.getTechnicians(),
+          dbService.getSurveyants(),
           dbService.getAllFaults()
         ]);
         setStations(stList);
         setFaultTemplates(tempList);
         setTeams(teamList);
-        setTechnicians(techList);
+        setSurveyants(surveyantList);
         setAllFaults(faultList);
       } else {
-        // Tekniker ise sadece kendine atanan arızaları ve kendi ekibini çek
+        // Sürveyan ise sadece kendine atanan arızaları ve kendi ekibini çek
         const [myFaults, myTeams, stList] = await Promise.all([
-          dbService.getTechnicianFaults(user.id),
-          dbService.getTechnicianTeams(user.id),
+          dbService.getSurveyantFaults(user.id),
+          dbService.getSurveyantTeams(user.id),
           dbService.getStations()
         ]);
-        setTechFaults(myFaults);
-        setTechTeams(myTeams);
-        setStations(stList); // Teknikerlerin de istasyonları görebilmesi için
+        setSurveyantFaults(myFaults);
+        setSurveyantTeams(myTeams);
+        setStations(stList); // Sürveyanların da istasyonları görebilmesi için
       }
     } catch (err) {
       console.error("Veri çekme hatası:", err);
@@ -132,7 +132,7 @@ export default function DashboardPage() {
     try {
       const updatedUser = await dbService.login(currentUser.email, currentUser.password, newRole);
       setCurrentUser(updatedUser);
-      showAlert('success', `Rolünüz başarıyla "${newRole === 'yetkili' ? 'Yetkili' : 'Tekniker'}" olarak değiştirildi.`);
+      showAlert('success', `Rolünüz başarıyla "${newRole === 'yetkili' ? 'Yetkili' : 'Sürveyan'}" olarak değiştirildi.`);
       fetchData(updatedUser);
     } catch (err) {
       showAlert('danger', err.message);
@@ -176,26 +176,26 @@ export default function DashboardPage() {
   // 3. Ekip Oluştur
   const handleCreateTeam = async (e) => {
     e.preventDefault();
-    if (selectedTechs.length === 0) {
-      showAlert('danger', 'Lütfen ekibe en az 1 tekniker seçin.');
+    if (selectedSurveyants.length === 0) {
+      showAlert('danger', 'Lütfen ekibe en az 1 sürveyan seçin.');
       return;
     }
     try {
-      await dbService.addTeam(teamName, selectedTechs);
-      showAlert('success', `"${teamName}" başarıyla oluşturuldu ve teknikerler atandı.`);
+      await dbService.addTeam(teamName, selectedSurveyants);
+      showAlert('success', `"${teamName}" başarıyla oluşturuldu ve sürveyanlar atandı.`);
       setTeamName('');
-      setSelectedTechs([]);
+      setSelectedSurveyants([]);
       fetchData(currentUser);
     } catch (err) {
       showAlert('danger', err.message);
     }
   };
 
-  const handleTechCheckbox = (techId) => {
-    if (selectedTechs.includes(techId)) {
-      setSelectedTechs(selectedTechs.filter(id => id !== techId));
+  const handleSurveyantCheckbox = (techId) => {
+    if (selectedSurveyants.includes(techId)) {
+      setSelectedSurveyants(selectedSurveyants.filter(id => id !== techId));
     } else {
-      setSelectedTechs([...selectedTechs, techId]);
+      setSelectedSurveyants([...selectedSurveyants, techId]);
     }
   };
 
@@ -235,18 +235,18 @@ export default function DashboardPage() {
   const openEditTeamModal = (team) => {
     setEditingTeam(team);
     setEditTeamName(team.name);
-    setEditSelectedTechs(team.members ? team.members.map(m => m.id) : []);
+    setEditSelectedSurveyants(team.members ? team.members.map(m => m.id) : []);
     setIsEditTeamOpen(true);
   };
 
   const handleEditTeam = async (e) => {
     e.preventDefault();
-    if (editSelectedTechs.length === 0) {
-      showAlert('danger', 'Lütfen ekibe en az 1 tekniker seçin.');
+    if (editSelectedSurveyants.length === 0) {
+      showAlert('danger', 'Lütfen ekibe en az 1 sürveyan seçin.');
       return;
     }
     try {
-      await dbService.updateTeam(editingTeam.id, editTeamName, editSelectedTechs);
+      await dbService.updateTeam(editingTeam.id, editTeamName, editSelectedSurveyants);
       showAlert('success', `"${editTeamName}" ekibi başarıyla güncellendi.`);
       setIsEditTeamOpen(false);
       setEditingTeam(null);
@@ -256,11 +256,11 @@ export default function DashboardPage() {
     }
   };
 
-  const handleEditTechCheckbox = (techId) => {
-    if (editSelectedTechs.includes(techId)) {
-      setEditSelectedTechs(editSelectedTechs.filter(id => id !== techId));
+  const handleEditSurveyantCheckbox = (techId) => {
+    if (editSelectedSurveyants.includes(techId)) {
+      setEditSelectedSurveyants(editSelectedSurveyants.filter(id => id !== techId));
     } else {
-      setEditSelectedTechs([...editSelectedTechs, techId]);
+      setEditSelectedSurveyants([...editSelectedSurveyants, techId]);
     }
   };
 
@@ -285,12 +285,12 @@ export default function DashboardPage() {
     }
   };
 
-  // ARIZA ÇÖZME MODALINI AÇ (TEKNİKER)
+  // ARIZA ÇÖZME MODALINI AÇ (SÜRVEYAN)
   const handleOpenResolveFaultModal = (fault) => {
     setResolvingFault(fault);
     setResolutionNotes('');
     setUsedParts('');
-    setResolutionTeamId(techTeams.length > 0 ? techTeams[0].id : '');
+    setResolutionTeamId(surveyantTeams.length > 0 ? surveyantTeams[0].id : '');
     setIsResolveFaultOpen(true);
   };
 
@@ -343,7 +343,7 @@ export default function DashboardPage() {
           <h2>Merhaba, {currentUser.full_name}!</h2>
           <p>
             {currentUser.role === 'yetkili' 
-              ? 'Yönetici paneli üzerinden istasyonları, arıza şablonlarını ve teknisyen ekiplerini yönetebilirsiniz.' 
+              ? 'Yönetici paneli üzerinden istasyonları, arıza şablonlarını ve sürveyan ekiplerini yönetebilirsiniz.' 
               : 'Ekibinize atanan aktif arızaları aşağıda görebilir ve tamamlandığında yapıldı olarak işaretleyebilirsiniz.'}
           </p>
           {dbService.isMock() && (
@@ -437,7 +437,7 @@ export default function DashboardPage() {
                     <label htmlFor="tDesc">Standart Çözüm Adımları / Açıklama</label>
                     <textarea 
                       id="tDesc"
-                      placeholder="Bu arıza durumunda teknikerlerin yapması gereken adımlar..." 
+                      placeholder="Bu arıza durumunda sürveyanların yapması gereken adımlar..." 
                       className="form-control"
                       rows="2"
                       value={templateDesc}
@@ -451,7 +451,7 @@ export default function DashboardPage() {
               </Card>
 
               {/* 3. Ekip Oluşturma */}
-              <Card title="Tekniker Ekibi Oluştur" subtitle="Teknikerleri bir araya getirerek bakım ekibi oluşturun.">
+              <Card title="Sürveyan Ekibi Oluştur" subtitle="Sürveyanları bir araya getirerek bakım ekibi oluşturun.">
                 <form onSubmit={handleCreateTeam}>
                   <div className="form-group">
                     <label htmlFor="tName">Ekip İsmi</label>
@@ -466,17 +466,17 @@ export default function DashboardPage() {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Teknikerler Seçin</label>
-                    {technicians.length === 0 ? (
-                      <p className={styles.noDataText}>Sistemde kayıtlı tekniker bulunmamaktadır. Kayıt sayfasından tekniker rolüyle üye ekleyebilirsiniz.</p>
+                    <label>Sürveyanlar Seçin</label>
+                    {surveyants.length === 0 ? (
+                      <p className={styles.noDataText}>Sistemde kayıtlı sürveyan bulunmamaktadır. Kayıt sayfasından sürveyan rolüyle üye ekleyebilirsiniz.</p>
                     ) : (
                       <div className={styles.techChecklist}>
-                        {technicians.map(tech => (
+                        {surveyants.map(tech => (
                           <label key={tech.id} className={styles.checkboxLabel}>
                             <input 
                               type="checkbox"
-                              checked={selectedTechs.includes(tech.id)}
-                              onChange={() => handleTechCheckbox(tech.id)}
+                              checked={selectedSurveyants.includes(tech.id)}
+                              onChange={() => handleSurveyantCheckbox(tech.id)}
                             />
                             <span>{tech.full_name}</span>
                           </label>
@@ -569,12 +569,12 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="form-group">
-                    <label>Görevlendirilecek Bireysel Teknisyenler (Çoklu Seçim)</label>
-                    {technicians.length === 0 ? (
-                      <p className={styles.noDataText}>Sistemde teknisyen bulunamadı.</p>
+                    <label>Görevlendirilecek Bireysel Sürveyanlar (Çoklu Seçim)</label>
+                    {surveyants.length === 0 ? (
+                      <p className={styles.noDataText}>Sistemde sürveyan bulunamadı.</p>
                     ) : (
                       <div className={styles.techChecklist}>
-                        {technicians.map(tech => (
+                        {surveyants.map(tech => (
                           <label key={tech.id} className={styles.checkboxLabel}>
                             <input 
                               type="checkbox"
@@ -587,7 +587,7 @@ export default function DashboardPage() {
                                 }
                               }}
                             />
-                            <span>🔧 {tech.full_name}</span>
+                            <span>📋 {tech.full_name}</span>
                           </label>
                         ))}
                       </div>
@@ -633,7 +633,7 @@ export default function DashboardPage() {
               </Card>
 
               {/* Mevcut Ekipler Listesi */}
-              <Card title="Tanımlı Bakım Ekipleri" subtitle="Sistemdeki ekipler ve bünyelerindeki teknikerler.">
+              <Card title="Tanımlı Bakım Ekipleri" subtitle="Sistemdeki ekipler ve bünyelerindeki sürveyanlar.">
                 {teams.length === 0 ? (
                   <p className={styles.noDataText}>Oluşturulmuş ekip bulunamadı.</p>
                 ) : (
@@ -657,7 +657,7 @@ export default function DashboardPage() {
                         <div className={styles.teamMembersChips}>
                           {team.members && team.members.length > 0 ? (
                             team.members.map(m => (
-                              <span key={m.id} className={styles.memberChip}>🔧 {m.full_name}</span>
+                              <span key={m.id} className={styles.memberChip}>📋 {m.full_name}</span>
                             ))
                           ) : (
                             <span className={styles.noMember}>Üye atanmamış</span>
@@ -732,12 +732,12 @@ export default function DashboardPage() {
                                       ))}
                                     </div>
                                   ) : null}
-                                  {/* Atanan Bireysel Teknisyenler */}
+                                  {/* Atanan Bireysel Sürveyanlar */}
                                   {fault.assigned_users && fault.assigned_users.length > 0 ? (
                                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.2rem' }}>
                                       {fault.assigned_users.map(user => (
                                         <span key={user.id} className={styles.tableUserBadge}>
-                                          🔧 {user.full_name}
+                                          📋 {user.full_name}
                                         </span>
                                       ))}
                                     </div>
@@ -778,17 +778,17 @@ export default function DashboardPage() {
           </div>
         ) : (
           // ==========================================
-          // TEKNİKER PANELİ
+          // SÜRVEYAN PANELİ
           // ==========================================
           <div className={styles.techLayout}>
             {/* Sol Kolon: Üye Olduğu Ekipler */}
             <div className={styles.techSideCol}>
               <Card title="Ekibiniz" subtitle="Dahil olduğunuz bakım ve arıza ekipleri.">
-                {techTeams.length === 0 ? (
+                {surveyantTeams.length === 0 ? (
                   <p className={styles.noDataText}>Herhangi bir ekibe dahil değilsiniz. Lütfen yöneticinizden sizi bir ekibe atamasını isteyin.</p>
                 ) : (
                   <div className={styles.myTeams}>
-                    {techTeams.map(team => (
+                    {surveyantTeams.map(team => (
                       <div key={team.id} className={styles.myTeamCard}>
                         <h4>👥 {team.name}</h4>
                         <p>Bu ekibe atanan arızaları çözümleme yetkisine sahipsiniz.</p>
@@ -817,7 +817,7 @@ export default function DashboardPage() {
             {/* Sağ Kolon: Atanan Arızalar */}
             <div className={styles.techMainCol}>
               <Card title="Size Atanan Arıza Kayıtları" subtitle="Ekibinize yönlendirilen, yapılması bekleyen işler listesi.">
-                {techFaults.length === 0 ? (
+                {surveyantFaults.length === 0 ? (
                   <div className={styles.emptyTasks}>
                     <span>🎉</span>
                     <h4>Harika! Açık arıza bulunmuyor.</h4>
@@ -825,7 +825,7 @@ export default function DashboardPage() {
                   </div>
                 ) : (
                   <div className={styles.techFaultsList}>
-                    {techFaults.map(fault => (
+                    {surveyantFaults.map(fault => (
                       <div key={fault.id} className={`${styles.techFaultCard} ${fault.status === 'yapıldı' ? styles.techFaultResolved : ''}`}>
                         <div className={styles.techFaultHeader}>
                           <div className={styles.techFaultTitleBlock}>
@@ -854,7 +854,7 @@ export default function DashboardPage() {
                             ))}
                             {fault.assigned_users && fault.assigned_users.map(user => (
                               <span key={user.id} className={styles.memberChip} style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-success)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-                                🔧 {user.full_name} {user.id === currentUser.id ? '(Siz)' : ''}
+                                📋 {user.full_name} {user.id === currentUser.id ? '(Siz)' : ''}
                               </span>
                             ))}
                           </div>
@@ -920,17 +920,17 @@ export default function DashboardPage() {
                     />
                   </div>
                   <div className="form-group" style={{ marginTop: '1rem' }}>
-                    <label>Teknikerler Seçin</label>
-                    {technicians.length === 0 ? (
-                      <p className={styles.noDataText}>Tekniker bulunamadı.</p>
+                    <label>Sürveyanlar Seçin</label>
+                    {surveyants.length === 0 ? (
+                      <p className={styles.noDataText}>Sürveyan bulunamadı.</p>
                     ) : (
                       <div className={styles.techChecklist}>
-                        {technicians.map(tech => (
+                        {surveyants.map(tech => (
                           <label key={tech.id} className={styles.checkboxLabel}>
                             <input 
                               type="checkbox"
-                              checked={editSelectedTechs.includes(tech.id)}
-                              onChange={() => handleEditTechCheckbox(tech.id)}
+                              checked={editSelectedSurveyants.includes(tech.id)}
+                              onChange={() => handleEditSurveyantCheckbox(tech.id)}
                             />
                             <span>{tech.full_name}</span>
                           </label>
@@ -987,12 +987,12 @@ export default function DashboardPage() {
                     )}
                   </div>
                   <div className="form-group" style={{ marginTop: '1rem' }}>
-                    <label>Görevlendirilecek Teknisyenler (Çoklu Seçim)</label>
-                    {technicians.length === 0 ? (
-                      <p className={styles.noDataText}>Teknisyen bulunamadı.</p>
+                    <label>Görevlendirilecek Sürveyanlar (Çoklu Seçim)</label>
+                    {surveyants.length === 0 ? (
+                      <p className={styles.noDataText}>Sürveyan bulunamadı.</p>
                     ) : (
                       <div className={styles.techChecklist}>
-                        {technicians.map(tech => (
+                        {surveyants.map(tech => (
                           <label key={tech.id} className={styles.checkboxLabel}>
                             <input 
                               type="checkbox"
@@ -1005,7 +1005,7 @@ export default function DashboardPage() {
                                 }
                               }}
                             />
-                            <span>🔧 {tech.full_name}</span>
+                            <span>📋 {tech.full_name}</span>
                           </label>
                         ))}
                       </div>

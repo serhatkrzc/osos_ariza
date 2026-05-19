@@ -173,12 +173,12 @@ export default function StationDetailsPage() {
                           )}
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', marginTop: '0.25rem' }}>
-                          <span>Atanan Bireysel Teknisyenler:</span>
+                          <span>Atanan Bireysel Sürveyanlar:</span>
                           {fault.assigned_users && fault.assigned_users.length > 0 ? (
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
                               {fault.assigned_users.map(user => (
                                 <span key={user.id} className="badge badge-secondary" style={{ background: 'rgba(16, 185, 129, 0.12)', color: 'var(--color-success)', border: '1px solid rgba(16, 185, 129, 0.2)', fontSize: '0.75rem', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>
-                                  🔧 {user.full_name}
+                                  📋 {user.full_name}
                                 </span>
                               ))}
                             </div>

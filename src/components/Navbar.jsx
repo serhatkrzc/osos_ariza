@@ -23,11 +23,11 @@ export default function Navbar({ currentUser, onLogout, onRoleSwitch }) {
             <div className={styles.roleSwitcher}>
               <span className={styles.switchLabel}>Hızlı Test:</span>
               <button 
-                onClick={() => onRoleSwitch(currentUser.role === 'yetkili' ? 'tekniker' : 'yetkili')}
+                onClick={() => onRoleSwitch(currentUser.role === 'yetkili' ? 'sürveyan' : 'yetkili')}
                 className={`${styles.switchBtn} btn btn-secondary`}
                 title="Hızlıca Rol Değiştir"
               >
-                🔄 {currentUser.role === 'yetkili' ? 'Tekniker Ol' : 'Yetkili Ol'}
+                🔄 {currentUser.role === 'yetkili' ? 'Sürveyan Ol' : 'Yetkili Ol'}
               </button>
             </div>
           )}
@@ -41,7 +41,7 @@ export default function Navbar({ currentUser, onLogout, onRoleSwitch }) {
               <span className={`${styles.userRole} badge ${
                 currentUser.role === 'yetkili' ? 'badge-acil' : 'badge-yapildi'
               }`}>
-                {currentUser.role === 'yetkili' ? '🔑 YETKİLİ' : '🔧 TEKNİKER'}
+                {currentUser.role === 'yetkili' ? '🔑 YETKİLİ' : '📋 SÜRVEYAN'}
               </span>
             </div>
           </div>

@@ -12,9 +12,9 @@ const LS_TEAM_MEMBERS = 'osos_team_members';
 // MOCK VERİ TOHUMLAMA (Eğer localStorage boşsa doldurulacak)
 const initialUsers = [
   { id: 'u-1', email: 'yetkili@osos.com', password: '123', full_name: 'Ayşe Kaya', role: 'yetkili' },
-  { id: 'u-2', email: 'tekniker1@osos.com', password: '123', full_name: 'Ali Yılmaz', role: 'tekniker' },
-  { id: 'u-3', email: 'tekniker2@osos.com', password: '123', full_name: 'Veli Demir', role: 'tekniker' },
-  { id: 'u-4', email: 'tekniker3@osos.com', password: '123', full_name: 'Canan Can', role: 'tekniker' }
+  { id: 'u-2', email: 'surveyan1@osos.com', password: '123', full_name: 'Ali Yılmaz', role: 'sürveyan' },
+  { id: 'u-3', email: 'surveyan2@osos.com', password: '123', full_name: 'Veli Demir', role: 'sürveyan' },
+  { id: 'u-4', email: 'surveyan3@osos.com', password: '123', full_name: 'Canan Can', role: 'sürveyan' }
 ];
 
 const initialTeams = [
@@ -77,6 +77,46 @@ const initLocalStorage = () => {
   if (!localStorage.getItem(LS_STATIONS)) localStorage.setItem(LS_STATIONS, JSON.stringify(initialStations));
   if (!localStorage.getItem(LS_FAULT_TEMPLATES)) localStorage.setItem(LS_FAULT_TEMPLATES, JSON.stringify(initialFaultTemplates));
   if (!localStorage.getItem(LS_STATION_FAULTS)) localStorage.setItem(LS_STATION_FAULTS, JSON.stringify(initialStationFaults));
+
+  // Sürveyan rolü için LocalStorage Göçü (tekniker -> sürveyan)
+  try {
+    const existingUsers = localStorage.getItem(LS_USERS);
+    if (existingUsers) {
+      const parsedUsers = JSON.parse(existingUsers);
+      let updated = false;
+      parsedUsers.forEach(u => {
+        if (u.role === 'tekniker') {
+          u.role = 'sürveyan';
+          updated = true;
+        }
+        if (u.email && u.email.startsWith('tekniker')) {
+          u.email = u.email.replace('tekniker', 'surveyan');
+          updated = true;
+        }
+      });
+      if (updated) {
+        localStorage.setItem(LS_USERS, JSON.stringify(parsedUsers));
+      }
+    }
+    const currentUser = localStorage.getItem(LS_CURRENT_USER);
+    if (currentUser) {
+      const parsedUser = JSON.parse(currentUser);
+      let updated = false;
+      if (parsedUser.role === 'tekniker') {
+        parsedUser.role = 'sürveyan';
+        updated = true;
+      }
+      if (parsedUser.email && parsedUser.email.startsWith('tekniker')) {
+        parsedUser.email = parsedUser.email.replace('tekniker', 'surveyan');
+        updated = true;
+      }
+      if (updated) {
+        localStorage.setItem(LS_CURRENT_USER, JSON.stringify(parsedUser));
+      }
+    }
+  } catch (e) {
+    console.error("Migration error:", e);
+  }
 };
 
 initLocalStorage();
@@ -235,17 +275,17 @@ export const dbService = {
     }
   },
 
-  async getTechnicians() {
+  async getSurveyants() {
     if (isSupabaseActive()) {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('role', 'tekniker');
+        .eq('role', 'sürveyan');
       if (error) throw error;
       return data;
     } else {
       const users = JSON.parse(localStorage.getItem(LS_USERS) || '[]');
-      return users.filter(u => u.role === 'tekniker');
+      return users.filter(u => u.role === 'sürveyan');
     }
   },
 
@@ -290,7 +330,7 @@ export const dbService = {
     }
   },
 
-  async addTeam(name, technicianIds = []) {
+  async addTeam(name, surveyantIds = []) {
     if (isSupabaseActive()) {
       const { data: team, error } = await supabase
         .from('teams')
@@ -300,10 +340,10 @@ export const dbService = {
       
       if (error) throw error;
 
-      if (technicianIds.length > 0) {
-        const mapping = technicianIds.map(techId => ({
+      if (surveyantIds.length > 0) {
+        const mapping = surveyantIds.map(surveyantId => ({
           team_id: team.id,
-          user_id: techId
+          user_id: surveyantId
         }));
         const { error: memberErr } = await supabase
           .from('team_members')
@@ -327,9 +367,9 @@ export const dbService = {
       teams.push(newTeam);
       localStorage.setItem(LS_TEAMS, JSON.stringify(teams));
 
-      if (technicianIds.length > 0) {
+      if (surveyantIds.length > 0) {
         const members = JSON.parse(localStorage.getItem(LS_TEAM_MEMBERS) || '[]');
-        technicianIds.forEach(userId => {
+        surveyantIds.forEach(userId => {
           members.push({ team_id: newTeam.id, user_id: userId });
         });
         localStorage.setItem(LS_TEAM_MEMBERS, JSON.stringify(members));
@@ -339,7 +379,7 @@ export const dbService = {
     }
   },
 
-  async updateTeam(teamId, name, technicianIds = []) {
+  async updateTeam(teamId, name, surveyantIds = []) {
     if (isSupabaseActive()) {
       // 1. Ekip ismini güncelle
       const { error: teamErr } = await supabase
@@ -358,10 +398,10 @@ export const dbService = {
       if (deleteErr) throw deleteErr;
 
       // 3. Yeni üyeleri ekle
-      if (technicianIds.length > 0) {
-        const mapping = technicianIds.map(techId => ({
+      if (surveyantIds.length > 0) {
+        const mapping = surveyantIds.map(surveyantId => ({
           team_id: teamId,
-          user_id: techId
+          user_id: surveyantId
         }));
         const { error: memberErr } = await supabase
           .from('team_members')
@@ -386,7 +426,7 @@ export const dbService = {
       // Üyeleri güncelle
       let members = JSON.parse(localStorage.getItem(LS_TEAM_MEMBERS) || '[]');
       members = members.filter(m => m.team_id !== teamId);
-      technicianIds.forEach(userId => {
+      surveyantIds.forEach(userId => {
         members.push({ team_id: teamId, user_id: userId });
       });
       localStorage.setItem(LS_TEAM_MEMBERS, JSON.stringify(members));
@@ -787,7 +827,7 @@ export const dbService = {
     }
   },
 
-  async getTechnicianFaults(userId) {
+  async getSurveyantFaults(userId) {
     if (isSupabaseActive()) {
       const { data: memberOf, error: memberErr } = await supabase
         .from('team_members')
@@ -874,7 +914,7 @@ export const dbService = {
     }
   },
 
-  async getTechnicianTeams(userId) {
+  async getSurveyantTeams(userId) {
     if (isSupabaseActive()) {
       const { data: memberOf, error: memberErr } = await supabase
         .from('team_members')

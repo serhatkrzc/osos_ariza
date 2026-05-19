@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     full_name TEXT NOT NULL,
-    role TEXT NOT NULL CHECK (role IN ('yetkili', 'tekniker')),
+    role TEXT NOT NULL CHECK (role IN ('yetkili', 'sürveyan')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 

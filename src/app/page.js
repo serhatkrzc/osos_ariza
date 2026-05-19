@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [role, setRole] = useState('tekniker');
+  const [role, setRole] = useState('sürveyan');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -53,7 +53,7 @@ export default function LoginPage() {
       if (type === 'yetkili') {
         await dbService.login('yetkili@osos.com', '123');
       } else {
-        await dbService.login('tekniker1@osos.com', '123');
+        await dbService.login('surveyan1@osos.com', '123');
       }
       router.push('/dashboard');
     } catch (err) {
@@ -144,7 +144,7 @@ export default function LoginPage() {
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                 >
-                  <option value="tekniker">🔧 Tekniker</option>
+                  <option value="sürveyan">📋 Sürveyan</option>
                   <option value="yetkili">🔑 Yetkili (Yönetici)</option>
                 </select>
               </div>
@@ -176,11 +176,11 @@ export default function LoginPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleQuickLogin('tekniker')}
+                  onClick={() => handleQuickLogin('sürveyan')}
                   className="btn btn-secondary"
-                  title="E-posta: tekniker1@osos.com | Şifre: 123"
+                  title="E-posta: surveyan1@osos.com | Şifre: 123"
                 >
-                  🔧 Tekniker Girişi
+                  📋 Sürveyan Girişi
                 </button>
               </div>
             </div>
