@@ -1,0 +1,280 @@
+/* OSOS Arıza Takip Sistemi - Global CSS */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Renk Paleti - Premium Koyu Tema (Sleek Space Navy) */
+  --bg-primary: #080c14;
+  --bg-secondary: #111827;
+  --bg-tertiary: #1f2937;
+  
+  --accent: #3b82f6;
+  --accent-rgb: 59, 130, 246;
+  --accent-hover: #1d4ed8;
+  
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(59, 130, 246, 0.5);
+  
+  /* Neon Durum Renkleri */
+  --color-danger: #ef4444;       /* Acil */
+  --color-danger-rgb: 239, 68, 68;
+  --color-warning: #f59e0b;      /* Orta */
+  --color-warning-rgb: 245, 158, 11;
+  --color-info: #06b6d4;         /* Düşük */
+  --color-info-rgb: 6, 182, 212;
+  --color-success: #10b981;      /* Yapıldı */
+  --color-success-rgb: 16, 185, 129;
+  
+  /* Glassmorphic Efektler */
+  --glass-bg: rgba(17, 24, 39, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --border-radius: 12px;
+}
+
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Özel Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Cam Efekti Sınıfı */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--border-radius);
+}
+
+/* Grid & Layout Yapısı */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  width: 100%;
+}
+
+/* Başlıklar */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+/* Ortak Buton Tasarımları */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  border: none;
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 4px 14px 0 rgba(var(--accent-rgb), 0.3);
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px 0 rgba(var(--accent-rgb), 0.4);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+  background: var(--text-muted);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: #ffffff;
+  box-shadow: 0 4px 14px 0 rgba(var(--color-danger-rgb), 0.3);
+}
+.btn-danger:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px 0 rgba(var(--color-danger-rgb), 0.4);
+}
+
+/* Şık Badgeler (Neon Göstergeler) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.badge-acil {
+  background: rgba(var(--color-danger-rgb), 0.15);
+  color: var(--color-danger);
+  border-color: rgba(var(--color-danger-rgb), 0.3);
+  box-shadow: 0 0 12px 0 rgba(var(--color-danger-rgb), 0.1);
+}
+
+.badge-orta {
+  background: rgba(var(--color-warning-rgb), 0.15);
+  color: var(--color-warning);
+  border-color: rgba(var(--color-warning-rgb), 0.3);
+}
+
+.badge-dusuk {
+  background: rgba(var(--color-info-rgb), 0.15);
+  color: var(--color-info);
+  border-color: rgba(var(--color-info-rgb), 0.3);
+}
+
+.badge-yapildi {
+  background: rgba(var(--color-success-rgb), 0.15);
+  color: var(--color-success);
+  border-color: rgba(var(--color-success-rgb), 0.3);
+  box-shadow: 0 0 12px 0 rgba(var(--color-success-rgb), 0.1);
+}
+
+.badge-acik {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+/* Form Elemanları */
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-control {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: var(--transition-smooth);
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+}
+
+select.form-control option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Animasyonlar */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Duyarlı Düzen (Responsive Utilities) */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-2, .grid-3 {
+    grid-template-columns: 1fr;
+  }
+  .container {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,255 @@
+.loadingScreen,
+.errorScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  gap: 1rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.detailsWrapper {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  padding-bottom: 3rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.backBtn {
+  font-size: 0.85rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.stationTitleBlock {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stationTitleBlock h2 {
+  font-size: 1.75rem;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stCodeBadge {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .gridContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Teknik Bilgiler */
+.infoList {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+
+.infoLabel {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.infoValue {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.descriptionBlock {
+  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border-color);
+  padding: 1.25rem;
+  border-radius: 8px;
+}
+
+.descriptionBlock h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.descriptionBlock p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Arızalar Kolonu */
+.faultsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.noFaultsText {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.faultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.faultItem {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.25rem;
+  position: relative;
+  transition: var(--transition-smooth);
+}
+
+.faultItem::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+}
+
+.faultActive::before {
+  background: var(--color-warning);
+}
+
+.faultActive:has(.badge-acil)::before {
+  background: var(--color-danger);
+  box-shadow: 0 0 10px rgba(var(--color-danger-rgb), 0.4);
+}
+
+.faultResolved::before {
+  background: var(--color-success);
+}
+
+.faultItem:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.faultItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.faultDate {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.faultItem h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.375rem;
+  color: var(--text-primary);
+}
+
+.faultItem p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.assignmentBlock {
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.assignmentBlock span {
+  color: var(--text-muted);
+}
+
+.assignmentBlock strong {
+  color: var(--accent);
+}
+
+/* Çözüm Detayları */
+.resolutionDetails {
+  border-top: 1px solid rgba(16, 185, 129, 0.15);
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.resTeamRow,
+.resDateRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resTeamRow span:first-child,
+.resDateRow span:first-child {
+  color: var(--text-muted);
+}
+
+.resTeamBadge {
+  color: var(--color-success);
+  font-weight: 700;
+}

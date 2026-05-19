@@ -1,0 +1,658 @@
+.loadingScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  gap: 1rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.dashboardWrapper {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  padding-bottom: 3rem;
+}
+
+/* Uyarı Mesajları */
+.alert {
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid transparent;
+  animation: slideUp 0.3s ease-out;
+}
+
+.alertSuccess {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: var(--color-success);
+}
+
+.alertDanger {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: var(--color-danger);
+}
+
+/* Karşılama Bannerı */
+.welcomeBanner {
+  background: linear-gradient(135deg, rgba(22, 31, 48, 0.8) 0%, rgba(17, 24, 39, 0.8) 100%);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcomeBanner h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcomeBanner p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 800px;
+}
+
+.demoBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--color-warning);
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* İki Kolonlu Admin Düzeni */
+.adminLayout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.formsSection,
+.listsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Tekniker Seçim Listesi (Checkboxlar) */
+.techChecklist {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.checkboxLabel input {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+
+.noDataText {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem 0;
+  font-style: italic;
+}
+
+/* İstasyonlar Grid & Linkleri */
+.stationsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stationMiniCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.stationMiniCard:hover {
+  background: rgba(59, 130, 246, 0.05);
+  border-color: rgba(59, 130, 246, 0.2);
+  transform: translateX(4px);
+}
+
+.stCodeBadge {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.stInfo {
+  flex-grow: 1;
+}
+
+.stInfo h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stInfo span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  display: block;
+  margin-top: 0.125rem;
+}
+
+.arrowIcon {
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: var(--transition-smooth);
+}
+
+.stationMiniCard:hover .arrowIcon {
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+/* Ekipler */
+.teamsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.teamItem {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.teamHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.teamHeader h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.memberCount {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.teamMembersChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.memberChip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.noMember {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Arıza Tablosu */
+.faultTableContainer {
+  overflow-x: auto;
+}
+
+.faultTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.faultTable th,
+.faultTable td {
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.faultTable th {
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.faultTable tbody tr:hover {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.faultTableTitle {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.faultTableDesc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.125rem;
+}
+
+.tableStationLink {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.tableStationLink:hover {
+  text-decoration: underline;
+}
+
+.resolvedTeamSpan {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.assignedTeamSpan {
+  color: var(--text-secondary);
+}
+
+/* ==========================================
+   TEKNİKER DÜZENİ
+   ========================================== */
+.techLayout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.techSideCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.myTeams {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.myTeamCard {
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.myTeamCard h4 {
+  color: var(--color-success);
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.myTeamCard p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.emptyTasks {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.emptyTasks span {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+  animation: pulse 2s infinite;
+}
+
+.emptyTasks h4 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.emptyTasks p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.techFaultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.techFaultCard {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.techFaultCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 4px 0 0 4px;
+  background: var(--text-muted);
+}
+
+.techFaultCard:has(.badge-acil)::before {
+  background: var(--color-danger);
+  box-shadow: 0 0 10px rgba(var(--color-danger-rgb), 0.5);
+}
+
+.techFaultCard:has(.badge-orta)::before {
+  background: var(--color-warning);
+}
+
+.techFaultCard:has(.badge-dusuk)::before {
+  background: var(--color-info);
+}
+
+.techFaultCard:has(.badge-yapildi)::before {
+  background: var(--color-success);
+}
+
+.techFaultCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.techFaultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.techFaultTitleBlock {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stationLink a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.stationLink a:hover {
+  text-decoration: underline;
+}
+
+.techFaultBody h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.techFaultBody p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.faultDate {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.techFaultActions {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.25rem;
+}
+
+.resolvedByMessage {
+  margin-top: 1.25rem;
+  border-top: 1px solid rgba(16, 185, 129, 0.2);
+  padding-top: 1rem;
+  color: var(--color-success);
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .adminLayout,
+  .techLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Modallar */
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 15, 30, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modalContainer {
+  background: linear-gradient(135deg, rgba(22, 31, 48, 0.98) 0%, rgba(17, 24, 39, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-radius);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modalHeader h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.modalCloseBtn:hover {
+  color: var(--color-danger);
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Ekip Düzenle ve Arıza Atama Ekstra */
+.editTeamBtn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: var(--transition-smooth);
+}
+
+.editTeamBtn:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: scale(1.05);
+}
+
+.assignFaultBtn {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: var(--accent);
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.assignFaultBtn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #ffffff;
+}
+
+.tableTeamBadge {
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.tableUserBadge {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: var(--color-success);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.noAssignmentSpan {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Animasyonlar */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
